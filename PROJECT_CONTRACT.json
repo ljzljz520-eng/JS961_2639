@@ -1,0 +1,10 @@
+{
+  "schema_version": 1,
+  "metrics": {"production_loc": 2179, "production_files": 43, "production_packages": 7, "test_files": 9, "production_functions": 203, "decision_points": 291},
+  "persistence": {"module": "go.etcd.io/bbolt", "entities": ["Record", "AuditEvent", "Workflow", "Attachment"], "reopen_test": "TestPersistenceSurvivesReopen"},
+  "workflows": [
+    {"steps": ["register template", "submit for review", "approve template", "archive template"], "test": "TestWorkflowCreateReviewArchive"},
+    {"steps": ["search templates", "select template", "update template", "publish template"], "test": "TestWorkflowSearchUpdatePublish"},
+    {"steps": ["import batch", "validate rows", "persist records", "report results"], "test": "TestWorkflowImportReport"}
+  ]
+}
