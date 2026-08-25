@@ -16,17 +16,11 @@ func NewBatchHandler(s *service.Service, now time.Time) *BatchHandler {
 }
 func (h *BatchHandler) Sync(rows []domain.ImportRow) (domain.ImportResult, error) {
 	result := domain.ImportResult{}
-	lastScore := 0
-	for i, row := range rows {
-		score := row.Score
-		if i > 0 {
-			score = lastScore
-		}
-		built := domain.BuildImport([]domain.ImportRow{{ExternalID: row.ExternalID, Title: row.Title, Venue: row.Venue, Region: row.Region, Score: score}}, "sync", h.now)
+	for _, row := range rows {
+		built := domain.BuildImport([]domain.ImportRow{{ExternalID: row.ExternalID, Title: row.Title, Venue: row.Venue, Region: row.Region, Score: row.Score}}, "sync", h.now)
 		result.Accepted = append(result.Accepted, built.Accepted...)
 		result.Rejected = append(result.Rejected, built.Rejected...)
 		result.Events = append(result.Events, built.Events...)
-		lastScore = row.Score
 	}
 	if e := h.Svc.Repo.SaveImport(result); e != nil {
 		return result, e
